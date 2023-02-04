@@ -11,7 +11,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -19,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.diceapp.ui.theme.DiceAppTheme
 import android.widget.ImageView
 import android.widget.Button
+import androidx.compose.runtime.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,33 +39,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String) {
-
-    Image(painter = painterResource(id= R.drawable.dice), contentDescription = stringResource(id = R.string.dice))
-
-    val dice = Dice(6)
-    val diceRoll = dice.roll()
-
-    val diceImage: imageResource(id = R.drawable.dice)
-
-    val drawableResource = when (diceRoll){
-        1 -> R.drawable.dicesideone
-        2 -> R.drawable.dicesidetwo
-        3 -> R.drawable.dicesidethree
-        4 -> R.drawable.dicesidefour
-        5 -> R.drawable.dicesidefive
-        else -> R.drawable.dicesidesix
-    }
-
-    diceImage.setImageResource(drawableResource)
-
-    diceImage.contentDescription = diceRoll.toString()
-
+    var roll by remember { mutableStateOf(1) }
     Column() {
+        when (roll){
+            1 -> Image(painter = painterResource(id = R.drawable.dicesideone), contentDescription = stringResource(id = R.string.Dice_One))
+            2 -> Image(painter = painterResource(id = R.drawable.dicesidetwo), contentDescription = stringResource(id = R.string.Dice_Two))
+            3 -> Image(painter = painterResource(id = R.drawable.dicesidethree), contentDescription = stringResource(id = R.string.Dice_Three))
+            4 -> Image(painter = painterResource(id = R.drawable.dicesidefour), contentDescription = stringResource(id = R.string.Dice_Four))
+            5 -> Image(painter = painterResource(id = R.drawable.dicesidefive), contentDescription = stringResource(id = R.string.Dice_Five))
+            6 -> Image(painter = painterResource(id = R.drawable.dicesidesix), contentDescription = stringResource(id = R.string.Dice_Six))
+        }
         Text(
             text = "Hello $name!")
 
         Button(
-            onClick = { diceRoll=(1..6).random()},
+            onClick = { roll=(1..6).random()},
 
 
         ) {
@@ -80,14 +68,5 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     DiceAppTheme {
         Greeting("Android")
-    }
-}
-class Dice(private val numSides: Int) {
-
-    /**
-     * Do a random dice roll and return the result.
-     */
-    fun roll(): Int {
-        return (1..numSides).random()
     }
 }
